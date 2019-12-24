@@ -14,6 +14,7 @@ import com.yangjinjing.cms.entity.Article;
 import com.yangjinjing.cms.entity.Category;
 import com.yangjinjing.cms.entity.Channel;
 import com.yangjinjing.cms.entity.Comment;
+import com.yangjinjing.cms.entity.Complain;
 import com.yangjinjing.cms.entity.Slide;
 import com.yangjinjing.cms.service.ArticleService;
 
@@ -108,6 +109,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public PageInfo<Article> hotList(int page) {
 		// TODO Auto-generated method stub
+		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
 		return new PageInfo<>(dao.hotList());
 	}
 
@@ -126,6 +128,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public PageInfo<Article> getArticle(int channleId, int catId, int page) {
 		// TODO Auto-generated method stub
+		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
 		return new PageInfo<>(dao.getArticles(channleId, catId));
 	}
 
@@ -151,6 +154,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public PageInfo<Comment> getComments(int articleId, int page) {
 		// TODO Auto-generated method stub
+		PageHelper.startPage(page,CmsContant.PAGE_SIZE);
 		return new PageInfo<>(dao.getComments(articleId));
 	}
 
@@ -158,6 +162,21 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<Category> getCategorisByCid(int cid) {
 		// TODO Auto-generated method stub
 		return dao.getCategorisByCid(cid);
+	}
+	
+	@Override
+	public int addComplain(Complain complain) {
+		// TODO Auto-generated method stub
+		dao.increaseComplainCnt(complain.getArticleId());
+		return dao.addComplain(complain);
+	}
+
+	@Override
+	public PageInfo<Complain> getComplains(int articleId, int page) {
+		// TODO Auto-generated method stub
+		
+		PageHelper.startPage(page, CmsContant.PAGE_SIZE);
+		return new PageInfo<Complain>(dao.getComplains(articleId));
 	}
 
 

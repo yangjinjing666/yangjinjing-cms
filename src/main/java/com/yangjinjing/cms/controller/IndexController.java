@@ -81,7 +81,7 @@ public class IndexController {
 	
 	@RequestMapping("channel")
 	public String channel(HttpServletRequest request,
-			int channelId,
+			Integer channelId,
 			@RequestParam(defaultValue="0")int catId,
 			@RequestParam(defaultValue="1")int page) throws InterruptedException{
 		Thread  t1 =  new Thread() {

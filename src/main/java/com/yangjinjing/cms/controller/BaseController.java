@@ -43,7 +43,7 @@ public class BaseController {
 		//随机生成文件名
 		String fileName = UUID.randomUUID().toString() + suffixName;
 		//文件另存
-		file.transferTo(new File(picRootPath+"/"+fileName+"/"+fileName));
+		file.transferTo(new File(picRootPath+"/"+subPath+"/"+fileName));
 		
 		return subPath + "/" + fileName;
 	}

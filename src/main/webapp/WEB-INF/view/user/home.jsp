@@ -70,7 +70,7 @@
     	
     		<li class="nav-item nav-link">a</li>
     		<li class="nav-item nav-link">c</li>
-    		<li class="nav-item nav-link">d</li>
+    		<li class="nav-item nav-link"><a href="/user/logout">退出</a></li>
     	</ul>
     </div>
   </div>

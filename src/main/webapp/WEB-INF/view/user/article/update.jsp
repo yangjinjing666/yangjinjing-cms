@@ -46,13 +46,13 @@
   
  <div class="form-group">
     <label for="exampleFormControlFile1">文章图片</label>
-    <img alt="" src="/pic/${article.picture}">
+    <img alt="未找到" src="/pic/${article.picture}">
     <input type="file" class="form-control-file" id="file" name="file">
   </div>
   
   <div class="form-group">
     <label for="content1">文章内容</label>
-    <textarea name="content1" id="contentId" cols="200" rows="200" style="width:700px;height:200px;visibility:hidden;">${content1}</textarea> 
+    <textarea name="content" id="contentId" cols="200" rows="200" style="width:700px;height:200px;visibility:hidden;">${article.content}</textarea> 
     
   </div>
   

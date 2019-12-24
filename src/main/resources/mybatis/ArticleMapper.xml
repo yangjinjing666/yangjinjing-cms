@@ -74,4 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM cms_article WHERE id=#{value} AND deleted=0
 	</select>
 	
+	<select id="">
+		select * from cms_complain where article_id = #{value}
+	</select>
 </mapper>

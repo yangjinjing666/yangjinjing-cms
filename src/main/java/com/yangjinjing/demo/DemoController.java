@@ -24,18 +24,9 @@ public class DemoController {
 		return "demo/toggle";
 	}
 	
-	//处理登录
-	@RequestMapping(value="login")
-	public @ResponseBody ResponseData login(HttpServletRequest request,@RequestParam("email")String email,@RequestParam("password")String password){
-		ResponseData responseData = ResponseData.ok();
-		//先到数据库验证
-		
-		if(password.equals(email)){
-			User User = new User();
-			
-		}
-		
-		return responseData;
+	@RequestMapping("checkbox")
+	public String checkbox(){
+		return "demo/checkbox";
 	}
 
 }

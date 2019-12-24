@@ -12,6 +12,7 @@ import com.yangjinjing.cms.entity.Article;
 import com.yangjinjing.cms.entity.Category;
 import com.yangjinjing.cms.entity.Channel;
 import com.yangjinjing.cms.entity.Comment;
+import com.yangjinjing.cms.entity.Complain;
 import com.yangjinjing.cms.entity.Slide;
 
 /** 
@@ -125,6 +126,18 @@ public interface ArticleService {
 	
 	PageInfo<Comment> getComments(int articleId, int page);
 	
-	
+	/**
+	 * 投诉
+	 * @param complain
+	 * @return
+	 */
+	int addComplain(Complain complain);
+	/**
+	 * 获取投诉
+	 * @param articleId
+	 * @param page
+	 * @return
+	 */
+	PageInfo<Complain> getComplains(int articleId,int page);
 	
 }

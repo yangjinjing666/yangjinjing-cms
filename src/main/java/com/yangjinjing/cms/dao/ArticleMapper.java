@@ -12,6 +12,7 @@ import com.yangjinjing.cms.entity.Article;
 import com.yangjinjing.cms.entity.Category;
 import com.yangjinjing.cms.entity.Channel;
 import com.yangjinjing.cms.entity.Comment;
+import com.yangjinjing.cms.entity.Complain;
 
 /** 
 * @author 作者:杨今敬
@@ -103,7 +104,7 @@ public interface ArticleMapper {
 	 * @param catId
 	 * @return
 	 */
-	List<Article> getArticles(@Param("channelId") int channleId,@Param("carId")int catId);
+	List<Article> getArticles(@Param("channelId") int channleId,@Param("catId")int catId);
 	
 	@Select("select id,name FROM cms_category where channel_id=#{value}")
 	@ResultType(Category.class)
@@ -124,6 +125,33 @@ public interface ArticleMapper {
 			+ " left join cms_user as u on u.id = c.userid "
 			+ " where articleId=#{value} order BY c.created DESC")
 	List<Comment> getComments(int articleId);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@Insert("INSERT INTO cms_complain(article_id,user_id,complain_type,"
+			+ "compain_option,src_url,picture,content,email,mobile,created)"
+			+ "   VALUES(#{articleId},#{userId},"
+			+ "#{complainType},#{complainOption},#{srcUrl},#{picture},#{content},#{email},#{mobile},now())")
+	int addComplain(Complain complain);
+	
+
+	/**
+	 * 
+	 * @param articleId
+	 */
+	@Update("UPDATE cms_article SET complainCnt=complainCnt+1,status=if(complainCnt>10,2,status)  "
+			+ " WHERE id=#{value}")
+	void increaseComplainCnt(Integer articleId);
+
+	/**
+	 * 
+	 * @param articleId
+	 * @return
+	 */
+	List<Complain> getComplains(int articleId);
+	
 	
 	
 	

@@ -56,6 +56,22 @@ public class UserController extends BaseController {
 		return "user/home";
 	}
 	
+	@RequestMapping("logout")
+	public String home(HttpServletRequest request,HttpServletResponse response){
+		request.getSession().removeAttribute(CmsContant.USER_KEY);
+		
+		Cookie cookieUserName = new Cookie("username", "");
+		cookieUserName.setPath("/");
+		cookieUserName.setMaxAge(0);//	立即过期
+		response.addCookie(cookieUserName);
+		Cookie cookieUserPwd = new Cookie("userpwd", "");
+		cookieUserPwd.setPath("/");
+		cookieUserPwd.setMaxAge(0);//	立即过期
+		response.addCookie(cookieUserPwd);
+		
+		return "redirect:/";
+	}
+	
 	/**
 	 * 跳转到注册界面
 	 * @param request
@@ -103,8 +119,6 @@ public class UserController extends BaseController {
 		//跳转到登录页面
 		return "redirect:login";
 	}
-	
-	
 	
 	
 	/**
@@ -157,9 +171,6 @@ public class UserController extends BaseController {
 		//进入个人中心
 		return "redirect:/user/home";
 	}
-	
-	
-	
 	
 	/**
 	 * @param username
@@ -299,6 +310,7 @@ public class UserController extends BaseController {
 		
 		return update > 0;
 	}
+	
 	
 	
 }

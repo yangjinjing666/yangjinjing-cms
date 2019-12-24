@@ -43,8 +43,8 @@ public class AdminController {
 		if(id<0){
 			
 		}
-		Article article = articleService.getInfoById(id);
-		if(article == null)
+		int result = articleService.setHot(id, status);
+		if(result < 1)
 			return new CmsMessage(CmsError.FAILED_UPDATE_DB,"设置失败，请稍后再试",null);
 		
 		return new CmsMessage(CmsError.SUCCESS,"成功",null);
@@ -89,7 +89,7 @@ public class AdminController {
 	
 	
 	@RequestMapping("article")
-	public String article(HttpServletRequest request, @RequestParam(defaultValue="0")Integer status, @RequestParam(defaultValue="1")int page ){
+	public String article(HttpServletRequest request, @RequestParam(defaultValue="-1")Integer status, @RequestParam(defaultValue="1")int page ){
 		PageInfo<Article> srticlePage = articleService.list(status, page);
 		request.setAttribute("status", status);
 		request.setAttribute("articlePage", srticlePage);

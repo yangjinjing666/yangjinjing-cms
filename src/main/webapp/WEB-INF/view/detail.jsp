@@ -68,7 +68,6 @@
 			// 显示第一页的评论
 			showComment(1)
 		})
-		content
 		function addComment(){
 			alert($("#commentText").val());
 			

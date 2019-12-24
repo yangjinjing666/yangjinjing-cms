@@ -147,7 +147,8 @@ public class ArticleController extends BaseController{
 		return "redirect:/article/detail?id="+complain.getArticleId();
 
 	}
-
+	
+	
 	//complains?articleId
 		@RequestMapping("complains")
 		public String 	complains(HttpServletRequest request,int articleId,

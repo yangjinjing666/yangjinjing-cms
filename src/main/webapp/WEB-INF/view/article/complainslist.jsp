@@ -16,7 +16,7 @@
 
 </head>
 <body>
-	<c:forEach items="${complainPage.list }" var="complain">
+	<c:forEach items="${complianPage.list }" var="complain">
 		<div class="col-md-3">${complain.user.username }</div>
 		<div class="col-md-3">${complain.content }</div>
 	</c:forEach>

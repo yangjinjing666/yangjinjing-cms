@@ -3,9 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- <div class="container-fluid"> -->
+	<select id="state" >
+		<option value="-1">全部</option>
+		<option value="0" ${status==0?"selected":"" }>未审核</option>
+		<option value="1" ${status==1?"selected":"" }>审核通过</option>
+		<option value="2" ${status==2?"selected":"" }>审核被拒</option>
+	</select>
 	<table class="table">
 		<!-- articlePage -->
-	
 	  <thead>
           <tr>
             <th>id</th>
@@ -20,6 +25,7 @@
             <th>操作</th>
           </tr>
         </thead>
+        
         <tbody>
         	<c:forEach items="${articlePage.list}" var="article">
         		<tr>
@@ -79,8 +85,7 @@
         </button>
       </div>
       <div class="modal-body" id="complainListDiv">
-         
-         		
+<!--          ////////////////////////////////////////////////////////////////////////////////////////////////// -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -133,9 +138,9 @@
 	* 查看文章的投诉
 	*/
 	function complainList(id){
+		global_article_id = id;
 		$("#complainModal").modal('show')
 		$("#complainListDiv").load("/article/complains?articleId="+id);
-		
 	}
 	
 	function del(id){
@@ -186,11 +191,13 @@
 	*/
 	function setStatus(status){
 		var id = global_article_id;
+		alert(id)
 		$.post("/admin/setArticeStatus",{id:id,status:status},function(msg){
 			if(msg.code==1){
 				alert('操作成功')
 				//隐藏当前的模态框
 				$('#articleContent').modal('hide')
+				$('#complainModal').modal('hide')
 				//刷新当前的页面
 				//refreshPage();
 				return;	
@@ -231,5 +238,13 @@
 	function refreshPage(){
 		$("#workcontent").load("/admin/article?page=" + '${articlePage.pageNum}' + "&status="+'${status}');
 	}
+	
+	$(function(){
+		$("#state").change(function(){
+			var statu = $("#state").val();
+			alert(statu)
+			$("#workcontent").load("/admin/article?page=" + '${pg.pageNum}' + "&status="+$("#state").val());
+		})
+	})
 	
 </script>

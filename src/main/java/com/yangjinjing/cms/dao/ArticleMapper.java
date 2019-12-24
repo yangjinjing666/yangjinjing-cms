@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.google.gson.annotations.SerializedName;
 import com.yangjinjing.cms.entity.Article;
 import com.yangjinjing.cms.entity.Category;
 import com.yangjinjing.cms.entity.Channel;
@@ -131,9 +132,9 @@ public interface ArticleMapper {
 	 * @return
 	 */
 	@Insert("INSERT INTO cms_complain(article_id,user_id,complain_type,"
-			+ "compain_option,src_url,picture,content,email,mobile,created)"
+			+ "compain_option,src_url,picture,content,email,mobile,created,complainStatus)"
 			+ "   VALUES(#{articleId},#{userId},"
-			+ "#{complainType},#{complainOption},#{srcUrl},#{picture},#{content},#{email},#{mobile},now())")
+			+ "#{complainType},#{complainOption},#{srcUrl},#{picture},#{content},#{email},#{mobile},now(),0)")
 	int addComplain(Complain complain);
 	
 
@@ -144,15 +145,12 @@ public interface ArticleMapper {
 	@Update("UPDATE cms_article SET complainCnt=complainCnt+1,status=if(complainCnt>10,2,status)  "
 			+ " WHERE id=#{value}")
 	void increaseComplainCnt(Integer articleId);
-
+	
 	/**
-	 * 
+	 * 根据文章ID查看该文章的所有投诉信息
 	 * @param articleId
 	 * @return
 	 */
-	List<Complain> getComplains(int articleId);
-	
-	
-	
+	List<Complain> getComplains(int articleIda);
 	
 }

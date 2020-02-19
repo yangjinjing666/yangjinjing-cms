@@ -2,9 +2,9 @@ package com.yangjinjing.cms.entity;
 
 import java.util.Date;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
 
 /** 
 * @author 作者:杨今敬
@@ -22,7 +22,7 @@ public class Complain {
 	@NotNull
 	private Integer complainType;
 	
-	@NotBlank
+	@org.hibernate.validator.constraints.NotBlank
 	private String complainOption;
 	private String srcUrl;
 	private String picture;

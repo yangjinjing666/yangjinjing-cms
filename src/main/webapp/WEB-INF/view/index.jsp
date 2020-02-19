@@ -124,6 +124,7 @@
 							作者：${article.user.username}
 							<br>
 							栏目：<a> ${article.channel.name} </a>&nbsp;&nbsp;&nbsp;&nbsp; 分类：<a>${article.category.name}</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;<a href="user/toAddCollection?id=${article.id }">收藏</a>
 						</div>
 					</div>
 				</c:forEach>
@@ -202,7 +203,17 @@
 </div>
 
 <jsp:include page="common/footer.jsp"></jsp:include>
+	<script type="text/javascript">
+		function gopage(page) {
+              var  channelId='${article.channelId}';
+              var  categoryId='${article.categoryId}';
+              var key = '${key}';
+              alert("key="+key);
+			location.href = "?channelId="+channelId+"&categoryId="+categoryId+"&page="
+					+ page+"&key="+key;
 
+		}
+	</script>
 
 </body>
 </html>

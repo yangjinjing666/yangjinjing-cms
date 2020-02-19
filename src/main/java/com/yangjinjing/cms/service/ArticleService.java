@@ -140,4 +140,8 @@ public interface ArticleService {
 	 */
 	PageInfo<Complain> getComplains(int articleId,int page);
 	
+	//新增浏览人数
+	void addLiuLan(String id);
+	
+	List<Article> listAll();
 }

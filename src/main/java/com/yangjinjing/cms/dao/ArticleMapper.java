@@ -152,5 +152,16 @@ public interface ArticleMapper {
 	 * @return
 	 */
 	List<Complain> getComplains(int articleIda);
+
+	@Select("select * from cms_article where status=#{i}")
+	List<Article> findAllArticlesWithStatus(int i);
 	
+	//添加到MySQL中返回主键:ID  方便添加到es索引库
+	int addMysqlAndEs(Article article);
+	
+	//增加阅读量
+	@Update("update cms_article set articleType=articleType+1 where id=${id}")
+	void addLiuLan(@Param("id") String id);
+	
+
 }

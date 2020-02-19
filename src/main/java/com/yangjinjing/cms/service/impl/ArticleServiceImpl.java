@@ -179,5 +179,17 @@ public class ArticleServiceImpl implements ArticleService {
 		return new PageInfo<Complain>(dao.getComplains(articleId));
 	}
 
+	@Override
+	public void addLiuLan(String id) {
+		// TODO Auto-generated method stub
+		dao.addLiuLan(id);
+	}
+
+	@Override
+	public List<Article> listAll() {
+		// TODO Auto-generated method stub
+		return dao.list(1);
+	}
+
 
 }

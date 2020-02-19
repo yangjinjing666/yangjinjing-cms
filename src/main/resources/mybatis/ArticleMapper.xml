@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     
 	<select id="list" resultMap="articleMapper">
-		SELECT id,title,channel_id,category_id ,user_id, created,status,hot ,picture,complainCnt
+		SELECT id,title,channel_id,category_id ,user_id, created,status,hot ,picture,complainCnt,content
 		  FROM cms_article
 		  WHERE   deleted=0
 		  <if test="value!=-1">
@@ -93,4 +93,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getComplains" resultMap="ComplainMapper">
 		SELECT * FROM cms_complain where article_id=#{value}
 	</select>
+	
+	<insert id="addMysqlAndEs" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.yangjinjing.cms.entity.Article">
+		insert into cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt,articleType) VALUES(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0,#{articleType})
+	</insert>
 </mapper>

@@ -33,6 +33,10 @@
 						    <label>密码</label>
 						    <input type="password" name="password" class="form-control"/>
 						  </div>
+						  <div>
+						  	<label>记住密码</label>
+						  	<input type="checkbox" name="status" value="1">
+						  </div>
 							  <button type="submit" class="btn btn-primary">登录</button>
 						        <a href="register"> <font color="#FF0033"> 尚无账号，点击这里直接去注册</font> </a>
 						</form>

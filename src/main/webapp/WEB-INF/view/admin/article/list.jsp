@@ -91,7 +91,6 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
         <button type="button" class="btn btn-primary" onclick="setStatus(1)">审核通过</button>
         <button type="button" class="btn btn-primary" onclick="setStatus(2)">审核拒绝</button>
-       
       </div>
     </div>
   </div>

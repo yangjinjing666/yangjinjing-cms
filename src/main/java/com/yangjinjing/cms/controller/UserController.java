@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,16 +20,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.druid.stat.TableStat.Mode;
 import com.github.pagehelper.PageInfo;
 import com.yangjinjing.cms.commen.CmsContant;
+import com.yangjinjing.cms.dao.ArticleRep;
 import com.yangjinjing.cms.entity.Article;
+import com.yangjinjing.cms.entity.ArticleCollection;
 import com.yangjinjing.cms.entity.Category;
 import com.yangjinjing.cms.entity.Channel;
 import com.yangjinjing.cms.entity.User;
 import com.yangjinjing.cms.service.ArticleService;
+import com.yangjinjing.cms.service.MyCollectionService;
 import com.yangjinjing.cms.service.UserService;
 import com.yangjinjing.cms.utils.HtmlUtils;
 import com.yangjinjing.cms.utils.StringUtils;
+import com.yangjinjing.utils.StringUtil;
 
 /** 
 * @author 作者:杨今敬
@@ -50,6 +56,12 @@ public class UserController extends BaseController {
 	
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private ArticleRep rep;
+	
+	@Autowired
+	private MyCollectionService collectionService;
 	
 	@RequestMapping("home")
 	public String home(){
@@ -139,7 +151,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="login",method=RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpServletResponse response,User user){
+	public String login(HttpServletRequest request,HttpServletResponse response,User user,@RequestParam(defaultValue="0",name="status")int status){
 		String pwd = new String(user.getPassword());
 		
 		User loginUser = userService.login(user);
@@ -153,16 +165,18 @@ public class UserController extends BaseController {
 		//登录成功，用户信息存放到session当中
 		request.getSession().setAttribute(CmsContant.USER_KEY, loginUser);
 		
+		//根据   status  判断是否要将密码账户和密码存储到cookie中
 		//保存用户的用户名密码
-		Cookie cookieUserName = new Cookie("username", user.getUsername());
-		cookieUserName.setPath("/");
-		cookieUserName.setMaxAge(10*24*3600);
-		response.addCookie(cookieUserName);
-		Cookie cookieUserPwd = new Cookie("userpwd", pwd);
-		cookieUserPwd.setPath("/");
-		cookieUserPwd.setMaxAge(10*24*3600);
-		response.addCookie(cookieUserPwd);
-		
+		if(status == 1){
+			Cookie cookieUserName = new Cookie("username", user.getUsername());
+			cookieUserName.setPath("/");
+			cookieUserName.setMaxAge(10*24*3600);
+			response.addCookie(cookieUserName);
+			Cookie cookieUserPwd = new Cookie("userpwd", pwd);
+			cookieUserPwd.setPath("/");
+			cookieUserPwd.setMaxAge(10*24*3600);
+			response.addCookie(cookieUserPwd);
+		}
 		//进入管理界面
 		if(loginUser.getRole()==CmsContant.USER_ROLE_ADMIN){
 			return "redirect:/admin/index";
@@ -188,6 +202,8 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public boolean deleteArticle(Integer id){
 		int result = articleService.delete(id);
+		//同时删除es索引库
+		rep.deleteById(id);
 		return result > 0;
 	}
 	
@@ -256,10 +272,13 @@ public class UserController extends BaseController {
 		return categoriByCid;
 	}
 	
+	//发表文章
 	@RequestMapping(value="postArticle",method=RequestMethod.POST)
 	@ResponseBody
 	public boolean postArticle(HttpServletRequest request,Article article,MultipartFile file){
 		String picUrl = "";
+		
+		
 		
 		//处理上传文件
 		try {
@@ -276,6 +295,10 @@ public class UserController extends BaseController {
 		//当前用户是文章的作者
 		User loginUser = (User) request.getSession().getAttribute(CmsContant.USER_KEY);
 		article.setUserId(loginUser.getId());
+		
+		//添加mysql 后再添加es
+		
+		
 		
 		return articleService.add(article)>0;
 	}
@@ -312,5 +335,48 @@ public class UserController extends BaseController {
 	}
 	
 	
+	
+	//显示我的收藏
+	@RequestMapping("myCollection")
+	public String myCollection(HttpServletRequest request){
+		//先获取登录的用户信息
+		User user = (User) request.getSession().getAttribute(CmsContant.USER_KEY);
+		//查询该用户的收藏夹
+		List<ArticleCollection> collectionList = collectionService.collectionList(user.getId());
+		request.setAttribute("article", collectionList);
+		
+		return "user/article/myCollectionList";
+	}
+	
+	//删除收藏
+	@RequestMapping("deleteColectionArticle")
+	public String deleteColectionArticle(Integer id){
+		collectionService.del(id);
+		return "redirect:home";
+	}
+	
+	//添加收藏
+	@RequestMapping("addColectionArticle")
+	public String addColectionArticle(ArticleCollection articleCollection,HttpServletRequest request){
+		User user = (User) request.getSession().getAttribute(CmsContant.USER_KEY);
+		
+		articleCollection.setUser_id(user.getId());
+		
+		String url = articleCollection.getUrl();
+		if(StringUtil.isHttpUrl(url)){
+			collectionService.add(articleCollection);
+			return "redirect:home";
+		}else{
+			return "err";
+		}
+	}
+	
+	//去添加
+	@RequestMapping("toAddCollection")
+	public String toAddCollection(Integer id,Model model){
+		Article byId = articleService.getById(id);
+		model.addAttribute("article", byId);
+		return "user/article/toAddCollection";
+	}
 	
 }

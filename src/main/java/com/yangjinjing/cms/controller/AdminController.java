@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageInfo;
 import com.yangjinjing.cms.commen.CmsError;
 import com.yangjinjing.cms.commen.CmsMessage;
+import com.yangjinjing.cms.dao.ArticleRep;
 import com.yangjinjing.cms.entity.Article;
 import com.yangjinjing.cms.service.ArticleService;
 
@@ -25,6 +26,8 @@ public class AdminController {
 
 	@Autowired
 	ArticleService articleService;
+	@Autowired
+	ArticleRep rep;
 	
 	@RequestMapping("index")
 	public String index(){
@@ -77,6 +80,12 @@ public class AdminController {
 			return new CmsMessage(CmsError.NOT_EXIST,"数据不存在",null);
 		}
 		
+		if(status == 1){
+			Article articleById = articleService.getById(id);
+			rep.save(articleById);
+		}if(status == 2){
+			rep.deleteById(id);
+		}
 		/*
 		 * 修改数据
 		 */

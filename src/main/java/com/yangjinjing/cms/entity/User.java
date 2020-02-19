@@ -3,7 +3,7 @@ package com.yangjinjing.cms.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
+/*import javax.validation.constraints.NotBlank;*/
 import javax.validation.constraints.Size;
 
 import com.yangjinjing.cms.commen.Gender;
@@ -22,11 +22,11 @@ public class User implements Serializable{
 
 	private Integer id;
 	
-	@NotBlank(message="用户名不能为空")
+//	@NotBlank(message="用户名不能为空")
 	@Size(max = 10, min = 3, message="用户名应该大于等于6且小于10")
 	private String username = null;
 	
-	@NotBlank(message="用户名不能为空")
+//	@NotBlank(message="用户名不能为空")
 	@Size(max = 16, min = 3, message="用户名应该大于等于6且小于10")
 	private String password;
 	

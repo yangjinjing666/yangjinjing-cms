@@ -1,15 +1,26 @@
 package com.yangjinjing.cms.entity;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /** 
 * @author 作者:杨今敬
 * @version 创建时间：2019年12月16日 下午6:35:31
 * 类功能说明 
 */
-public class Article {
+@Document(indexName="article",type="article")
+public class Article implements Serializable {
+	@Id
 	private Integer id;
+	//分詞
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String title;
+	@Field(analyzer="ik_smart",index=true,store=true,searchAnalyzer="ik_smart",type=FieldType.text)
 	private String content;
 	private String picture;
 	private int channelId;
